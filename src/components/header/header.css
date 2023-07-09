@@ -2,8 +2,9 @@
   background: #feebc0;
   border-bottom: 20px solid #c68b59;
 }
-.header .wrap {
+.header .wrapper {
   display: flex;
+  padding: 10px 50px;
   align-items: center;
   /* justify-content: space-between; */
 }
@@ -114,6 +115,10 @@
 .header-add .btn i{
   color: white;
   border-radius: 50%;
+}
+
+.header-container{
+  padding: 10px 50px;
 }
 
 .search-popup {

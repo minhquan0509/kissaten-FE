@@ -5,12 +5,15 @@ const initialState = {
   user: null,
   loading: false,
   error: null,
+  token: null
 };
 
 // Kiểm tra nếu có thông tin đăng nhập trong localStorage, khôi phục trạng thái đăng nhập
 const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
+const tokenFromLocalStorage = JSON.parse(localStorage.getItem('token'));
 if (userFromLocalStorage) {
   initialState.user = userFromLocalStorage;
+  initialState.token = tokenFromLocalStorage
 }
 
 const loginReducer = (state = initialState, action) => {
@@ -24,7 +27,8 @@ const loginReducer = (state = initialState, action) => {
     case LOGIN_SUCCESS:
       return {
         ...state,
-        user: action.payload,
+        user: action.payload.user,
+        token: action.payload.token,
         loading: false,
         error: null,
       };

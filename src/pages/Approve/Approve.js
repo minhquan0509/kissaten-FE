@@ -77,9 +77,9 @@ const Approve = () => {
                       gmail: null,
                       contactNumber: null,
                       imageCover: null,
-                      averageRating: null,
-                      openHour: null,
-                      closeHour: null,
+                      average_rating: null,
+                      open_hour: null,
+                      close_hour: null,
                       service: item.service,
                       description: null,
                       status: item.status,
@@ -118,7 +118,7 @@ const Approve = () => {
                 <div className="content">
                   <div className="name">{item.name}</div>
                   <div className="rating">
-                    <Showrating rating={item.averageRating} />
+                    <Showrating rating={item.average_rating} />
                   </div>
                   <div className="description">
                     <i className="fa-solid fa-location-dot"></i>
@@ -126,7 +126,7 @@ const Approve = () => {
                   </div>
                   <div className="description">
                     <i className="fa-solid fa-clock"></i>
-                    {item.openHour}-{item.closeHour} 毎日
+                    {item.open_hour}-{item.close_hour} 毎日
                   </div>
                 </div>
                 <div className="buttons">

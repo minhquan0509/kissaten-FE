@@ -17,6 +17,9 @@ img {
 
 .wrap {
   padding: 10px 50px;
+  /* background-color: #FAF0D7; */
+  background: #fffaf3;
+  min-height: 100vh;
 }
 
 .btn {

@@ -9,6 +9,7 @@ import { updateBookmarkedItemIds } from "../Login/loginActions";
 
 const Home = () => {
   const user = useSelector((state) => state.login.user);
+  const token = useSelector((state) => state.login.token);
   const bookmarkedItemIds = useSelector(
     (state) => state.login.bookmarkedItemIds
   );
@@ -18,16 +19,15 @@ const Home = () => {
   const [pulldown, setPulldown] = useState('All');
 
   useEffect(() => {
-    const axiosGetshop = async () => {
-      const response = await axios.post(
-        `https://localhost:7263/api/CoffeeShop/SortCoffeeShopSortBy/${pulldown}`
+    const getCoffeeShops = async () => {
+      const response = await axios.get(
+        `http://localhost:3001/coffees`
       );
-      const data = await response.data;
-      const filteredShop = data.filter(item => item.approved === 1);
-      setShop(filteredShop);
+      const data = await response.data.data.coffees;
+      setShop(data);
     };
-    axiosGetshop();
-  }, [pulldown]);
+    getCoffeeShops();
+  }, []);
 
   const handlePulldownChange = (event) => {
     const selectedValue = event.target.value;
@@ -37,11 +37,11 @@ const Home = () => {
   useEffect(() => {
     const axiosGetBookmarkedItemIds = async () => {
       if (user) {
-        const response = await axios.post(
-          `https://localhost:7263/api/BookMark/${user?.uid}/getListBookMark`
+        const response = await axios.get(
+          `http://localhost:3001/users/${user?.id}/bookmarks`
         );
-        const data = await response.data;
-        const bookmarkedItemIds = data.map((item) => item.id);
+        const data = await response.data.data.user.Bookmarks;
+        const bookmarkedItemIds = data.length ? data.map((item) => item.coffee_id) : [];
         dispatch(updateBookmarkedItemIds(bookmarkedItemIds));
       }
     };
@@ -51,14 +51,22 @@ const Home = () => {
   const handleBookmarkClick = async (itemId) => {
     if (bookmarkedItemIds.includes(itemId)) {
       await axios.delete(
-        `https://localhost:7263/api/BookMark/DeleteBookMarkById/${user?.uid}/${itemId}`
+        `http://localhost:3001/coffees/${itemId}/bookmarks`, {
+          headers: {
+            Authorization: 'Bearer ' + token
+          }
+        }
       );
       dispatch(
         updateBookmarkedItemIds(bookmarkedItemIds.filter((id) => id !== itemId))
       );
     } else {
       await axios.post(
-        `https://localhost:7263/api/BookMark/${user?.uid}/AddBookMark/${itemId}`
+        `http://localhost:3001/coffees/${itemId}/bookmarks`, {}, {
+          headers: {
+            Authorization: 'Bearer ' + token
+          }
+        }
       );
       dispatch(updateBookmarkedItemIds([...bookmarkedItemIds, itemId]));
     }
@@ -95,10 +103,10 @@ const Home = () => {
           <div className="filter">
             <label>Sort by</label>
             <select name="" id="" value={pulldown} onChange={handlePulldownChange}>
-  <option value="All">全部</option>
-  <option value="Rating">平均評価 ↑</option>
-  <option value="RatingDown">平均評価 ↓</option>
-</select>
+              <option value="All">全部</option>
+              <option value="Rating">平均評価 ↑</option>
+              <option value="RatingDown">平均評価 ↓</option>
+            </select>
           </div>
         </div>
         <div className="home-list">
@@ -110,12 +118,12 @@ const Home = () => {
                 onClick={() => navigate(`/inforshop/${item.id}`)}
               >
                 <div className="image">
-                  <img src={item.imageCover} alt="" />
+                  <img src={'http://localhost:3001/' + item.CoffeeImages[0].image} alt="" />
                 </div>
                 <div className="content">
                   <div className="name">{item.name}</div>
                   <div className="rating">
-                    <Showrating rating={item.averageRating} />
+                    <Showrating rating={item.average_rating} />
                   </div>
                   <div className="description">
                     <i className="fa-solid fa-location-dot"></i>
@@ -123,7 +131,7 @@ const Home = () => {
                   </div>
                   <div className="description">
                     <i className="fa-solid fa-clock"></i>
-                    {item.openHour}-{item.closeHour} 毎日
+                    {item.open_hour} - {item.close_hour.slice(0, 5)} 毎日
                   </div>
                 </div>
                   <Bookmark
@@ -136,12 +144,12 @@ const Home = () => {
                 key={index}
               >
                 <div className="image">
-                  <img src={item.imageCover} alt="" />
+                  <img src={'http://localhost:3001/' + item.CoffeeImages[0].image} alt="" />
                 </div>
                 <div className="content">
                   <div className="name">{item.name}</div>
                   <div className="rating">
-                    <Showrating rating={item.averageRating} />
+                    <Showrating rating={item.average_rating} />
                   </div>
                   <div className="description">
                     <i className="fa-solid fa-location-dot"></i>
@@ -149,7 +157,7 @@ const Home = () => {
                   </div>
                   <div className="description">
                     <i className="fa-solid fa-clock"></i>
-                    {item.openHour}-{item.closeHour} 毎日
+                    {item.open_hour.slice(5)} - {item.close_hour.slice(5)} 毎日
                   </div>
                 </div>
               </div>)

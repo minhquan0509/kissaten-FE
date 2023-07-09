@@ -19,16 +19,14 @@ const InforShop = () => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const user = useSelector((state) => state.login.user);
+  const token = useSelector((state) => state.login.token);
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [hdrv, setHdrv] = useState(false);
-  const bookmarkedItemIds = useSelector((state) => state.login.bookmarkedItemIds);
+  const bookmarkedItemIds = useSelector((state) => state.login.user.Bookmarks);
 
 // Lấy giá trị bookmarkedItemIds từ Redux store trong useEffect
-useEffect(() => {
-  setIsBookmarked(bookmarkedItemIds.includes(numberId));
-}, [bookmarkedItemIds, numberId]);
-
-  
+  useEffect(() => {
+    setIsBookmarked(bookmarkedItemIds?.includes(numberId));
+  }, [bookmarkedItemIds, numberId]);
 
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [isPopupOpen1, setPopupOpen1] = useState(false);
@@ -49,40 +47,42 @@ useEffect(() => {
     setPopupOpen1(false);
   };
 
+  const axiosShopInfo = async () => {
+    const response = await axios.get(
+      `http://localhost:3001/coffees/${id}/reviews/`
+    );
+    const data = response.data.data.coffee;
+    console.log(data);
+    setShopInfo(data);
+    setReview(data.Reviews);
+  };
+
   useEffect(() => {
-    const axiosShopInfo = async () => {
-      const response = await axios.post(
-        `https://localhost:7263/api/CoffeeShop/GetInfoCoffeeShop/${numberId}`
-      );
-      const data = await response.data;
-      setShopInfo(data);
-      setHdrv(false);
-    };
     axiosShopInfo();
-  }, [numberId,hdrv]);
+  }, [numberId]);
 
   const [username, setUsername] = useState("");
 
-  useEffect(() => {
-    const axiosReview = async () => {
-      const response = await axios.get(
-        `https://localhost:7263/api/Review/getReviewCoffeeShop/${numberId}`
-      );
-      const data = await response.data;
-      setReview(data);
-      // Lặp qua các đánh giá và lấy tên người dùng từ API
-      const usernames = await Promise.all(
-        data.map(async (review) => {
-          const userResponse = await axios.get(
-            `https://localhost:7263/api/User/${review.userId}/getUserNameByUserId`
-          );
-          return userResponse.data;
-        })
-      );
-      setUsername(usernames);
-    };
-    axiosReview();
-  }, [numberId, hdrv]);
+  // useEffect(() => {
+  //   const axiosReview = async () => {
+  //     const response = await axios.get(
+  //       `https://localhost:7263/api/Review/getReviewCoffeeShop/${numberId}`
+  //     );
+  //     const data = await response.data;
+  //     setReview(data);
+  //     // Lặp qua các đánh giá và lấy tên người dùng từ API
+  //     const usernames = await Promise.all(
+  //       data.map(async (review) => {
+  //         const userResponse = await axios.get(
+  //           `https://localhost:7263/api/User/${review.userId}/getUserNameByUserId`
+  //         );
+  //         return userResponse.data;
+  //       })
+  //     );
+  //     setUsername(usernames);
+  //   };
+  //   axiosReview();
+  // }, [numberId,]);
 
   if (!shopInfo) {
     return <div>Loading...</div>;
@@ -94,35 +94,18 @@ useEffect(() => {
 
   const handleAddReview = async () => {
     try {
-      const response = await fetch(
-        "https://localhost:7263/api/Review/addReviewCoffeeShop",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-
-          body: JSON.stringify({
-            userId: user?.uid,
-            coffeeId: numberId,
-            rating: rating,
-            comment: comment,
-            reviewAt: "",
-            editAt: "",
-          }),
+      const response = await axios.post(`http://localhost:3001/coffees/${id}/reviews`, {
+        review: comment,
+        rating
+      }, {
+        headers: {
+          Authorization: 'Bearer ' + token
         }
-      );
-      if (response.status === 200) {
-        //setMessage("Shop added successfully");
-        //console.log("Review added successfully");
-        setHdrv(true);
-        setRating(0);
-        setComment("");
-        //window.location.reload();
-      } else {
-      }
+      })
+      axiosShopInfo();
+      setRating(0);
+      setComment("");
+      //window.location.reload();
     } catch (error) {
       //setMessage("Error");
       console.error(error);
@@ -140,12 +123,12 @@ useEffect(() => {
                 <i className="fa-solid fa-bookmark fa-shake fa-xl" style={{ color: '#fad000' }}></i>
               </div>
             )}
-            <img src={shopInfo.imageCover} alt="" />
+            <img src={'http://localhost:3001/' + shopInfo.CoffeeImages[0].image} alt="" />
           </div>
           <div className="service">
             <h3 className="type">サービス</h3>
             <div className="buttons">
-              {shopInfo.service === true ? (
+              {shopInfo.air_conditioner === true ? (
                 <button className="btn">エアコン</button>
               ) : (
                 <button className="btn">エアコンがない</button>
@@ -153,7 +136,7 @@ useEffect(() => {
             </div>
             <div className="title">
               <h4>状態</h4>
-              {shopInfo.status === true ? (
+              {shopInfo.is_crowded === true ? (
                 <button className="btn">混んでいる</button>
               ) : (
                 <button className="btn" style={{ background: "#3EB410"}}>混んでいない</button>
@@ -186,8 +169,9 @@ useEffect(() => {
         <div className="inforShop-right">
           <h2>{shopInfo.name}</h2>
           {/* Hiển thị rating */}
+          <div className="list-info title">エアコンの品質</div>
           <div className="rating">
-            <Showrating rating={shopInfo.averageRating} />
+            <Showrating rating={shopInfo.average_rating} />
           </div>
           <div className="buttons">
             {/* Đổi tên biến change thành isDetailMode để thể hiện chế độ hiển thị */}
@@ -214,7 +198,7 @@ useEffect(() => {
               <div className="info">
                 <div className="title">営業時間</div>
                 <p className="content">
-                  {shopInfo.openHour}-{shopInfo.closeHour} 毎日
+                  {shopInfo.open_hour.slice(0, 5)}-{shopInfo.close_hour.slice(0, 5)} 毎日
                 </p>
               </div>
               <div className="info">
@@ -235,7 +219,7 @@ useEffect(() => {
                     </div>
                     <div className="content">
                       <div className="top">
-                        <div className="name">{username[index]}</div>
+                        <div className="name">{'User ' + review.user_id}</div>
                         <div className="status">
                           <div className="icon">
                             <span>(0)</span>{" "}
@@ -251,13 +235,14 @@ useEffect(() => {
                         <div className="rating">
                           <Showrating rating={review.rating} />
                         </div>
-                        <div className="text">{review.comment}</div>
+                        <div className="text">{review.review}</div>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
               <div className="input-comment">
+                <div className="list-info title">エアコンの評価</div>
                 <RatingStar value={rating} onClick={handleRatingChange} />
                 <textarea
                   name=""
@@ -267,10 +252,10 @@ useEffect(() => {
                   required
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
-                  placeholder="コンメントを入れてください。。。"
+                  placeholder="エアコンの品質とコメントを評価してください。。。"
                 ></textarea>
                 <button className="btn" onClick={handleAddReview}>
-                  発信
+                  投稿
                 </button>
               </div>
             </div>

@@ -6,22 +6,88 @@ import Showrating from '../../components/Rating/showrating';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { deleteBookmark } from '../Login/loginActions';
+import { updateBookmarkedItemIds } from "../Login/loginActions";
+import Bookmark from '../../components/Bookmark/bookmark';
 
 
 const Bookmarkpage = () => {
   const user = useSelector((state) => state.login.user);
+  const bookmarkedItemIds = useSelector(state => state.login.bookmarkedItemIds);
+  const token = useSelector(state => state.login.token);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-
-  const [shop,setShop]= useState([]);
+  const [shop, setShop]= useState([]);
+  const [initialShop, setInitialShop]= useState([]);
+  const axiosGetshop = async () => {
+    const response = await axios.get(`http://localhost:3001/users/${user.id}/bookmarks`);
+    const data = await response.data.data.user.Bookmarks;
+    setShop(data.map(item => item.Coffee));
+    setInitialShop(data.map(item => item.Coffee));
+  }
   useEffect(() => {
-    const axiosGetshop = async () => {
-    const response = await axios.post(`https://localhost:7263/api/BookMark/${user?.uid}/getListBookMark`);
-    const data = await response.data;
-    setShop(data);}
     axiosGetshop();
-    }, [user?.uid]);
+  }, [user?.id]);
+
+  useEffect(() => {
+    const axiosGetBookmarkedItemIds = async () => {
+      if (user) {
+        const response = await axios.get(
+          `http://localhost:3001/users/${user?.id}/bookmarks`
+        );
+        const data = await response.data.data.user.Bookmarks;
+        const bookmarkedItemIds = data.length ? data.map((item) => item.coffee_id) : [];
+        dispatch(updateBookmarkedItemIds(bookmarkedItemIds));
+      }
+    };
+    axiosGetBookmarkedItemIds();
+  }, [user, dispatch]);
+
+  const handleBookmarkClick = async (itemId) => {
+    if (bookmarkedItemIds.includes(itemId)) {
+      await axios.delete(
+        `http://localhost:3001/coffees/${itemId}/bookmarks`, {
+          headers: {
+            Authorization: 'Bearer ' + token
+          }
+        }
+      );
+      dispatch(
+        updateBookmarkedItemIds(bookmarkedItemIds.filter((id) => id !== itemId))
+      );
+    } else {
+      await axios.post(
+        `http://localhost:3001/coffees/${itemId}/bookmarks`, {}, {
+          headers: {
+            Authorization: 'Bearer ' + token
+          }
+        }
+      );
+      dispatch(updateBookmarkedItemIds([...bookmarkedItemIds, itemId]));
+    }
+  };
+
+  const handleOpeningHour = (e) => {
+    if(e.target.value == 'isOpen') {
+      const currentDateTime = new Date();
+      const filteredData = shop.filter(coffeeShop => {
+        const openTime = new Date(currentDateTime.toDateString() + ' ' + coffeeShop.open_hour);
+        const closeTime = new Date(currentDateTime.toDateString() + ' ' + coffeeShop.close_hour);
+        return currentDateTime >= openTime && currentDateTime <= closeTime;
+      });
+      setShop(filteredData)
+    } else axiosGetshop();
+  }
+
+  const handleIsCrowed = (e) => {
+    if(e.target.value == 'crowed') {
+      const filteredData = initialShop.filter(coffeeShop => coffeeShop.is_crowded)
+      setShop(filteredData)
+    } else {
+      const filteredData = initialShop.filter(coffeeShop => !coffeeShop.is_crowded)
+      setShop(filteredData)
+    }
+  }
 
   return (
     <section className='bookmark'>
@@ -38,41 +104,32 @@ const Bookmarkpage = () => {
             <div className="filter">
               <div className="title">営業時間</div>
               <div className="form-control">
-                <input id='row-1' type="radio" name='radio-1' defaultChecked />
+                <input value='all' id='row-1' type="radio" name='radio-1' defaultChecked onChange={handleOpeningHour}/>
                 <label htmlFor="row-1"></label>
                 <p className="text">すべて</p>
               </div>
               <div className="form-control">
-                <input id='row-2' type="radio" name='radio-1' />
+                <input value='isOpen' id='row-2' type="radio" name='radio-1' onChange={handleOpeningHour}/>
                 <label htmlFor="row-2"></label>
                 <p className="text">開いています</p>
               </div>
             </div>
             <div className="filter">
-              <div className="title">サービス</div>
+              <div className="title">状況</div>
               <div className="form-control">
-                <input id='row-3' type="radio" name='radio-2' defaultChecked />
+                <input value='crowed' id='row-3' type="radio" name='radio-2' defaultChecked onChange={handleIsCrowed}/>
                 <label htmlFor="row-3"></label>
-                <p className="text">すべて</p>
+                <p className="text">混んでいる</p>
               </div>
               <div className="form-control">
-                <input id='row-4' type="radio" name='radio-2' />
+                <input value='notCrowed' id='row-4' type="radio" name='radio-2' onChange={handleIsCrowed}/>
                 <label htmlFor="row-4"></label>
-                <p className="text">エアコン</p>
+                <p className="text">混んでいない</p>
               </div>
             </div>
           </div>
           <div className="bookmark-list">
             {shop.map((item, index) => {
-              const handleDeleteMark = (e) => {
-                e.stopPropagation();
-                const axiosDeleteMark = async () => {
-                  await axios.delete(`https://localhost:7263/api/BookMark/DeleteBookMarkById/${user?.uid}/${item.id}`);
-                };
-                axiosDeleteMark();
-                dispatch(deleteBookmark(item.id));
-                window.location.reload();
-              };
             return (
               <div
                 className="home-item"
@@ -80,12 +137,12 @@ const Bookmarkpage = () => {
                 onClick={() => navigate(`/inforshop/${item.id}`)}
               >
                 <div className="image">
-                  <img src={item.imageCover} alt="" />
+                  <img src={'http://localhost:3001/' + item.CoffeeImages[0].image} alt="" />
                 </div>
                 <div className="content">
                   <div className="name">{item.name}</div>
                   <div className="rating">
-                    <Showrating rating={item.averageRating} />
+                    <Showrating rating={item.average_rating} />
                   </div>
                   <div className="description">
                     <i className="fa-solid fa-location-dot"></i>
@@ -93,15 +150,14 @@ const Bookmarkpage = () => {
                   </div>
                   <div className="description">
                     <i className="fa-solid fa-clock"></i>
-                    {item.openHour}-{item.closeHour} 毎日
+                    {item.open_hour}-{item.close_hour} 毎日
                   </div>
                 </div>
-                <div className="icon">
-                <i
-                  className="fa-solid fa-bookmark fa-shake fa-xl"
-                  style={{ color: "#fad000" }}
-                  onClick={handleDeleteMark}
-                ></i></div>
+                <Bookmark
+                  isBookmarked={bookmarkedItemIds.includes(item.id)}
+                  handleBookmarkClick={handleBookmarkClick}
+                  itemId={item.id}
+                />
               </div>
             );
           })}

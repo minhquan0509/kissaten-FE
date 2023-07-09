@@ -10,7 +10,7 @@ const Header = () => {
   const user = useSelector((state) => state.login.user);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [cafeName, setCafeName] = useState("");
-  const [area, setArea] = useState(" ");
+  const [area, setArea] = useState("");
   const [hasAC, setHasAC] = useState(false);
   
   const [status, setStatus] = useState("open");
@@ -46,9 +46,9 @@ const Header = () => {
 
   const handleSearchSubmit = () => {
     setPopupOpen(false);
-    if(area===" ") {setArea("no")};
-    if(status===null) {setStatus("all")};
-    navigate(`/search/${cafeName}/${area}/${hasAC}/${status}`);
+    const date = new Date().toLocaleTimeString('en-US', { hour12: false });
+    // navigate(`/search/${cafeName}/${area}/${hasAC}/${status}`);
+    navigate(`/search?` + (cafeName.length > 0 ? `name=${cafeName}&` : '') + (area.length > 0 ? `address=${area}&` : '') + (hasAC == true ? `air_conditioner=true&` : '') + (status === "open" ? `current_hour=${date}&` : ''))
   }; 
 
   const handleAddClick = () => {
@@ -73,8 +73,8 @@ const Header = () => {
   const [isPopupOpen1, setPopupOpen1] = useState(false);
   const [imageCover, setImageCover] = useState(null);
   const [name, setName] = useState('');
-  const [openHour, setOpenHour] = useState('');
-  const [closeHour, setCloseHour] = useState('');
+  const [open_hour, setopen_hour] = useState('');
+  const [close_hour, setclose_hour] = useState('');
   const [description, setDescription] = useState('');
   const [service, setService] = useState('');
   const [address, setAddress] = useState('');
@@ -99,13 +99,13 @@ const Header = () => {
             gmail: "string",
             contactNumber: 0,
             imageCover: imageCover,
-            averageRating: 0,
-            openHour: openHour,
-            closeHour: closeHour,
+            average_rating: 0,
+            open_hour: open_hour,
+            close_hour: close_hour,
             service: boolservice,
             description: description,
             status: false,
-            postedByUser: user.uid,
+            postedByUser: user.id,
             approved: 0,
           }),
         }
@@ -130,7 +130,7 @@ const Header = () => {
 
   return (
     <header className="header">
-      <div className="wrap">
+      <div className="wrapper">
         <div className="header-logo" onClick={() => navigate(`/`)}>
           <div className="image">
             <img
@@ -157,7 +157,7 @@ const Header = () => {
         </div>)}
         <div className="header-login">
           {user? (
-          <MenuDropdown username={user?.username}/>):(
+          <MenuDropdown username={user?.name}/>):(
           <button className="btn" onClick={() => navigate(`/login`)}>
             <i className="fa-solid fa-user"></i> <strong>ログイン</strong>
           </button>)}
@@ -183,7 +183,6 @@ const Header = () => {
                   id="cafe-name"
                   value={cafeName}
                   onChange={(e) => setCafeName(e.target.value)}
-                  required
                 />
               </div>
 
@@ -284,8 +283,8 @@ const Header = () => {
                     id="opening-time"
                     name="opening-time"
                     required
-                    value={openHour}
-                    onChange={(e) => setOpenHour(e.target.value)}
+                    value={open_hour}
+                    onChange={(e) => setopen_hour(e.target.value)}
                   >
                     <option value="">Chọn giờ mở</option>
                   <option value="08:00">08:00</option>
@@ -301,8 +300,8 @@ const Header = () => {
                     id="closing-time"
                     name="closing-time"
                     required
-                    value={closeHour}
-                    onChange={(e) => setCloseHour(e.target.value)}
+                    value={close_hour}
+                    onChange={(e) => setclose_hour(e.target.value)}
                   >
                     <option value="">Chọn giờ đóng</option>
                   <option value="20:00">20:00</option>

@@ -20,7 +20,7 @@ const App = () => {
 
   return (
     <div className="App">
-       <ToastContainer />
+      <ToastContainer />
       <Routes>
         <Route path="/login" element={<Login />} />
         {user&& <Route
@@ -51,7 +51,7 @@ const App = () => {
           }
         />}
         <Route
-          path="/search/:cafeName/:area/:service/:status"
+          path="/search"
           element={
             <div>
               <Header/>

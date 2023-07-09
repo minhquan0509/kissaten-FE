@@ -12,8 +12,8 @@ const UpdateStore = ({ handlePopupClose,id,uid }) => {
   const [address, setAddress] = useState('');
   const [status, setStatus] = useState(''); // Giá trị ban đầu của ô địa chỉ
   const [service, setService] = useState(''); 
-  const [open, setOpenHour] = useState('');
-  const [close, setCloseHour] = useState('');
+  const [open, setopen_hour] = useState('');
+  const [close, setclose_hour] = useState('');
 
   useEffect(() => {
     const axiosShopInfo = async () => {
@@ -32,8 +32,8 @@ const UpdateStore = ({ handlePopupClose,id,uid }) => {
       setProductName(shopInfo&& shopInfo.name?shopInfo.name:'');
       setDescription(shopInfo&& shopInfo.description?shopInfo.description:'');
       setAddress(shopInfo&& shopInfo.address?shopInfo.address:'');
-      setOpenHour(shopInfo&& shopInfo.openHour?shopInfo.openHour:'');
-      setCloseHour(shopInfo&& shopInfo.closeHour?shopInfo.closeHour:'');
+      setopen_hour(shopInfo&& shopInfo.open_hour?shopInfo.open_hour:'');
+      setclose_hour(shopInfo&& shopInfo.close_hour?shopInfo.close_hour:'');
       setService(shopInfo&& shopInfo.service?shopInfo.service:'');
       setStatus(shopInfo&& shopInfo.status?shopInfo.status:'');
   }, [shopInfo]); 
@@ -64,11 +64,11 @@ const UpdateStore = ({ handlePopupClose,id,uid }) => {
   };
 
   const handleOpenChange = (event) => {
-    setOpenHour(event.target.value); // Cập nhật giá trị địa chỉ khi người dùng thay đổi ô input
+    setopen_hour(event.target.value); // Cập nhật giá trị địa chỉ khi người dùng thay đổi ô input
   };
   
   const handleCloseChange = (event) => {
-    setCloseHour(event.target.value); // Cập nhật giá trị địa chỉ khi người dùng thay đổi ô input
+    setclose_hour(event.target.value); // Cập nhật giá trị địa chỉ khi người dùng thay đổi ô input
   };
 
   const handleStatusChange = (e) => {
@@ -104,9 +104,9 @@ const UpdateStore = ({ handlePopupClose,id,uid }) => {
             gmail: "string",
             contactNumber: 0,
             imageCover: imageUrl,
-            averageRating: null,
-            openHour: open,
-            closeHour: close,
+            average_rating: null,
+            open_hour: open,
+            close_hour: close,
             service: service,
             description: description,
             status: status,
