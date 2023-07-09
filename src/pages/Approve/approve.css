@@ -1,0 +1,95 @@
+.approve-title {
+  text-align: center;
+  font-size: 36px;
+  margin: 0;
+  color: var(--primary-color);
+}
+
+.approve-list {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+.approve-item {
+  display: flex;
+  gap: 20px;
+  padding: 10px;
+  margin-top: 20px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.approve-item .image {
+  width: 100px;
+}
+
+.approve-item .content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+
+.approve-item .content .name {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.approve-item .content .rating{
+  font-size: 12px;
+}
+
+i.fill {
+  color: #d8d355;
+}
+.approve-item .content .description {
+  font-size: 12px;
+}
+
+.approve-item .content .description i {
+  margin-right: 10px;
+}
+
+.approve-item .buttons {
+  display: flex;
+  gap: 10px;
+  height: fit-content;
+}
+
+.approve-item .buttons button {
+  padding: 8px 15px;
+  outline: none;
+  border: none;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  color: black;
+  font-weight: 600;
+}
+
+.approve-item .buttons button.green {
+  background-color: #9c9;
+  margin-right: 5px;
+}
+
+.approve-item .buttons button.red {
+  background-color: #ff5757;
+}
+
+.approve-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 50px;
+}
+
+.approve-pagination .page {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-weight: 600;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+}

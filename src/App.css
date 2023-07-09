@@ -1,0 +1,26 @@
+:root {
+  --primary-color: #2f1368;
+}
+
+.App {
+  max-width: 1200px;
+  width: 100%;
+  margin: auto;
+  box-sizing: content-box;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wrap {
+  padding: 10px 50px;
+}
+
+.btn {
+  border-radius: 5px;
+  outline: none;
+  border: none;
+}

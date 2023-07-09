@@ -1,0 +1,90 @@
+.search-heading {
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-heading .filter label {
+    margin-right: 5px;
+  }
+  .search-heading .filter select {
+    width: 150px;
+    max-width: 150px;
+    margin-left: 5px;
+    padding: 5px;
+  }
+  
+  .search-heading .title {
+    margin-left: -20px;
+    padding: 0;
+    font-size: 32px;
+    flex: 2;
+    text-align: center;
+  }
+  
+  .search-list {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+  }
+  
+  .search-item {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
+  
+  .search-item .image {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .search-item .content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+  }
+  
+  .search-item .content .name {
+    font-size: 20px;
+    font-weight: 600;
+  }
+  
+  .search-item .content .rating{
+    font-size: 12px;
+  }
+  
+  i.fill {
+    color: #d8d355;
+  }
+  .search-item .content .description {
+    font-size: 12px;
+  }
+  
+  .search-item .content .description i {
+    margin-right: 10px;
+  }
+  
+  .search-item .icon {
+    font-size: 20px;
+  }
+  .search-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 50px;
+  }
+  
+  .search-pagination .page {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  }
