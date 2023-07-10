@@ -3,8 +3,10 @@ import React, { useState , useEffect } from "react";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import "./updateStore.css";
+import { useSelector } from "react-redux";
 
-const UpdateStore = ({ handlePopupClose,id,uid }) => {
+const UpdateStore = ({ handlePopupClose, id, storeInfo }) => {
+  const token = useSelector(state => state.login.token)
   const [shopInfo, setShopInfo] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
   const [productName, setProductName] = useState('');
@@ -12,30 +14,30 @@ const UpdateStore = ({ handlePopupClose,id,uid }) => {
   const [address, setAddress] = useState('');
   const [status, setStatus] = useState(''); // Giá trị ban đầu của ô địa chỉ
   const [service, setService] = useState(''); 
-  const [open, setopen_hour] = useState('');
-  const [close, setclose_hour] = useState('');
+  const [open, setOpen] = useState('');
+  const [close, setClose] = useState('');
+
+  // useEffect(() => {
+  //   const axiosShopInfo = async () => {
+  //     const response = await axios.post(
+  //       `https://localhost:7263/api/CoffeeShop/GetInfoCoffeeShop/${id}`
+  //     );
+  //     const data = await response.data;
+  //     setShopInfo(data);
+  //     //console.log(data);
+  //   };
+  //   axiosShopInfo();
+  // }, [id]);
 
   useEffect(() => {
-    const axiosShopInfo = async () => {
-      const response = await axios.post(
-        `https://localhost:7263/api/CoffeeShop/GetInfoCoffeeShop/${id}`
-      );
-      const data = await response.data;
-      setShopInfo(data);
-      //console.log(data);
-    };
-    axiosShopInfo();
-  }, [id]);
-
-  useEffect(() => {
-      setImageUrl(shopInfo&& shopInfo.imageCover ?shopInfo.imageCover:'');
-      setProductName(shopInfo&& shopInfo.name?shopInfo.name:'');
-      setDescription(shopInfo&& shopInfo.description?shopInfo.description:'');
-      setAddress(shopInfo&& shopInfo.address?shopInfo.address:'');
-      setopen_hour(shopInfo&& shopInfo.open_hour?shopInfo.open_hour:'');
-      setclose_hour(shopInfo&& shopInfo.close_hour?shopInfo.close_hour:'');
-      setService(shopInfo&& shopInfo.service?shopInfo.service:'');
-      setStatus(shopInfo&& shopInfo.status?shopInfo.status:'');
+      // setImageUrl(shopInfo&& shopInfo.imageCover ?shopInfo.imageCover:'');
+      setProductName(storeInfo.name);
+      setDescription(storeInfo?.description);
+      setAddress(storeInfo.address);
+      setOpen(storeInfo.open_hour.slice(0, 5));
+      setClose(storeInfo.close_hour.slice(0, 5));
+      setService(storeInfo.air_conditioner);
+      setStatus(storeInfo.status);
   }, [shopInfo]); 
 
   //console.log(open);
@@ -64,11 +66,11 @@ const UpdateStore = ({ handlePopupClose,id,uid }) => {
   };
 
   const handleOpenChange = (event) => {
-    setopen_hour(event.target.value); // Cập nhật giá trị địa chỉ khi người dùng thay đổi ô input
+    setOpen(event.target.value); // Cập nhật giá trị địa chỉ khi người dùng thay đổi ô input
   };
   
   const handleCloseChange = (event) => {
-    setclose_hour(event.target.value); // Cập nhật giá trị địa chỉ khi người dùng thay đổi ô input
+    setClose(event.target.value); // Cập nhật giá trị địa chỉ khi người dùng thay đổi ô input
   };
 
   const handleStatusChange = (e) => {
@@ -87,45 +89,23 @@ const UpdateStore = ({ handlePopupClose,id,uid }) => {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(
-        "https://localhost:7263/api/CoffeeShop/EditCoffeeShop",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-
-          body: JSON.stringify({
-            id: id,
-            name: productName,
-            address: address,
-            gmail: "string",
-            contactNumber: 0,
-            imageCover: imageUrl,
-            average_rating: null,
-            open_hour: open,
-            close_hour: close,
-            service: service,
-            description: description,
-            status: status,
-            postedByUser: null,
-            approved: null,
-          }),
+      const response = await axios.patch(`http://localhost:3001/coffees/${id}`, {
+        name: productName,
+        address,
+        open_hour: open,
+        close_hour: close,
+        air_conditioner: service,
+        description,
+        is_crowded: status
+      }, {
+        headers: {
+          Authorization: 'Bearer ' + token
         }
-      );
-      if (response.status === 200) {
-        toast.success('編集を作成しました。', {
-          autoClose: 2500, // Đóng sau 2 giây
-        });
-        window.location.reload();
-        //console.log("Shop added successfully");
-      } else {
-        toast.error('エラーが発生しました。',{
-          autoClose: 2500, // Đóng sau 2 giây
-        });
-      }
+      })
+      toast.success('編集ができました。', {
+        autoClose: 2500, // Đóng sau 2 giây
+      });
+      window.location.reload();
     } catch (error) {
       console.error(error);
       toast.error('エラーが発生しました。',{
@@ -186,19 +166,20 @@ const UpdateStore = ({ handlePopupClose,id,uid }) => {
                 <textarea
                   id="description"
                   name="description"
+                  cols="30"
+                  rows="10"
                   value={description}
-                  onChange={handleDescriptionChange}
-                  required
+                  onChange={(e) => setDescription(e.target.value)}
+                  // required
                 ></textarea>
               </div>
             </div>
             <div className="right-section">
               <div className="form-group">
                 <label htmlFor="service">Dịch vụ:</label>
-                <select id="service" name="service" value={service} required>
-                  <option value="">Chọn dịch vụ</option>
+                <select id="service" name="service" value={service} onChange={(e) => setService(e.target.value)} required>
                   <option value={true}>Có điều hòa</option>
-                    <option value={false}>Không có điều hòa</option>
+                  <option value={false}>Không có điều hòa</option>
                 </select>
               </div>
               <div className="form-group">
@@ -216,9 +197,9 @@ const UpdateStore = ({ handlePopupClose,id,uid }) => {
                 <label htmlFor="image">Hình ảnh:</label>
               </div>
               <div className="square form-group">
-                {imageUrl ? (
+                {storeInfo.CoffeeImages[0]?.image ? (
                   <div className="image-square">
-                    <img src={imageUrl} alt="Uploaded" className="image" />
+                    <img src={`http://localhost:3001/` + storeInfo.CoffeeImages[0]?.image} alt="Uploaded" className="image" />
                   </div>
                 ) : (
                   <label htmlFor="image-upload" className="upload-label">

@@ -261,7 +261,7 @@ const InforShop = () => {
             </div>
           )}
         </div>
-        {isPopupOpen && <UpdateStore handlePopupClose={handlePopupClose} id={numberId} uid={user?.uid}/>}
+        {isPopupOpen && <UpdateStore handlePopupClose={handlePopupClose} id={numberId} storeInfo={shopInfo}/>}
         {isPopupOpen1 && (
           <DeletePopup handlePopupClose1={handlePopupClose1} id={numberId} />
         )}
