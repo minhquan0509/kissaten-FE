@@ -11,6 +11,22 @@
   margin-top: 10px;
 }
 
+.filter{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.filter label {
+  margin-right: 5px;
+}
+
+.filter select {
+  width: 150px;
+  max-width: 150px;
+  margin-left: 5px;
+  padding: 5px;
+}
+
 .bookmark-filter {
   flex: 1;
   height: fit-content;

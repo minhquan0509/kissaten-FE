@@ -21,6 +21,8 @@ const Search = () => {
   const current_hour = searchParams.get('current_hour');
   const navigate = useNavigate();
   const [shopInfo, setShopInfo] = useState([]);
+  const [initialShop, setInitialShop] = useState([]);
+  const [pulldown, setPulldown] = useState([]);
 
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -57,6 +59,7 @@ const Search = () => {
           const data = response.data.data.coffees;
 
           setShopInfo(data);
+          setInitialShop(data)
         } else {
           setShopInfo([]);
         }
@@ -93,11 +96,33 @@ const Search = () => {
     }
   };
 
+  const handlePulldownChange = (event) => {
+    const selectedValue = event.target.value;
+    setPulldown(selectedValue);
+    if(selectedValue == "RatingDown") {
+      const modifiedList = initialShop.sort((a, b) => b.average_rating - a.average_rating);
+      setShopInfo(modifiedList);
+    } else if (selectedValue == "All")
+      setShopInfo(initialShop);
+    else if (selectedValue == "Rating") {
+      const modifiedList = initialShop.sort((a, b) => a.average_rating - b.average_rating);
+      setShopInfo(modifiedList)
+    }
+  };
+
   return (
     <section className='search'>
       <div className='wrap'>
         <div className='search-heading'>
           <h2 className='title'>検索結果</h2>
+          <div className="filter">
+            <label>Sort by</label>
+            <select name="" id="" value={pulldown} onChange={handlePulldownChange}>
+              <option value="All">全部</option>
+              <option value="Rating">平均評価 ↑</option>
+              <option value="RatingDown">平均評価 ↓</option>
+            </select>
+          </div>
         </div>
         <div className='search-list'>
           {currentShops.length > 0 ? (

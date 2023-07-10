@@ -16,6 +16,7 @@ const Home = () => {
   const dispatch = useDispatch();
 
   const [shop, setShop] = useState([]);
+  const [initialShop, setInitialShop] = useState([]);
   const [pulldown, setPulldown] = useState('All');
 
   useEffect(() => {
@@ -25,6 +26,7 @@ const Home = () => {
       );
       const data = await response.data.data.coffees;
       setShop(data);
+      setInitialShop(data);
     };
     getCoffeeShops();
   }, []);
@@ -32,6 +34,15 @@ const Home = () => {
   const handlePulldownChange = (event) => {
     const selectedValue = event.target.value;
     setPulldown(selectedValue);
+    if(selectedValue == "RatingDown") {
+      const modifiedList = initialShop.sort((a, b) => b.average_rating - a.average_rating);
+      setShop(modifiedList);
+    } else if (selectedValue == "All")
+      setShop(initialShop);
+    else if (selectedValue == "Rating") {
+      const modifiedList = initialShop.sort((a, b) => a.average_rating - b.average_rating);
+      setShop(modifiedList)
+    }
   };
 
   useEffect(() => {
