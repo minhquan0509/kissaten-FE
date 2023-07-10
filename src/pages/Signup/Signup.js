@@ -3,8 +3,10 @@ import "./Signup.css";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 const Signup = () => {
+  const [name, setName] = useState("")
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [recheckPassword, setRecheckPassword] = useState("");
@@ -22,34 +24,21 @@ const Signup = () => {
     }
 
     try {
-      const response = await fetch("https://localhost:7263/api/User/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({
-          userName: userName,
-          password: password,
-          gmail: "",
-        }),
+      const response = await axios.post(`http://localhost:3001/users/signup`, {
+        name,
+        gmail: userName,
+        password,
+        confirmPassword: recheckPassword,
+        role: 'user',
+        nationality: 'japanese'
+      })
+      toast.success("登録ができました。", {
+        autoClose: 2500,
       });
-
-      if (response.status === 200) {
-        toast.success("登録が成功しました。", {
-          autoClose: 2500,
-        });
-        navigate("/login");
-        console.log("signup added successfully");
-      } else {
-        toast.error("登録に失敗しました。登録情報を再確認してください。", {
-          autoClose: 2500,
-        });
-      }
+      setTimeout(navigate("/login"), 1000);
     } catch (error) {
       console.error(error);
-      toast.error("ユーザー登録リクエストの送信中にエラーが発生しました。", {
+      toast.error("ユーザーが発生しました。", {
         autoClose: 2500,
       });
     }
@@ -76,6 +65,15 @@ const Signup = () => {
             <h3>サインアップ</h3>
           </div>
           <form onSubmit={signupClick}>
+            <div className="form-group">
+              <div className="title">お名前</div>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
             <div className="form-group">
               <div className="title">ユーザー名</div>
               <input

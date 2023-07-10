@@ -22,6 +22,24 @@ const Search = () => {
   const navigate = useNavigate();
   const [shopInfo, setShopInfo] = useState([]);
 
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const shopsPerPage = 6;
+
+  // Tính chỉ số các shop trong danh sách cần hiển thị trên trang hiện tại
+  const indexOfLastShop = currentPage * shopsPerPage;
+  const indexOfFirstShop = indexOfLastShop - shopsPerPage;
+  const currentShops = shopInfo.slice(indexOfFirstShop, indexOfLastShop);
+
+  // Tạo mảng phân trang dựa trên số lượng coffee shop và số lượng shop trên mỗi trang
+  const pageNumbers = Array.from(
+    { length: Math.ceil(shopInfo.length / shopsPerPage) },
+    (_, index) => index + 1
+  );
+
+  // Hàm chuyển trang
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   useEffect(() => {
     const axiosShopInfo = async () => {
       try {
@@ -82,8 +100,8 @@ const Search = () => {
           <h2 className='title'>検索結果</h2>
         </div>
         <div className='search-list'>
-          {shopInfo.length > 0 ? (
-            shopInfo.map((item, index) => (
+          {currentShops.length > 0 ? (
+            currentShops.map((item, index) => (
               <div
                 className='home-item'
                 key={index}
@@ -117,25 +135,23 @@ const Search = () => {
             <div className='no-results'>検索結果が見つかりません。</div>
           )}
         </div>
-        {shopInfo.length > 6 && (
-          <div className='approve-pagination'>
-            <a className='page' href='!'>
-              <i className='fa-solid fa-chevron-left'></i>
-            </a>
-            <a className='page' href='!'>
-              1
-            </a>
-            <a className='page' href='!'>
-              2
-            </a>
-            <a className='page' href='!'>
-              3
-            </a>
-            <a className='page' href='!'>
-              <i className='fa-solid fa-chevron-right'></i>
-            </a>
+        {shopInfo.length > 6 && <div className="home-pagination">
+          <div className="page">
+            <i className="fa-solid fa-chevron-left"></i>
           </div>
-        )}
+          {pageNumbers.map((number) => (
+            <div
+              className={`page${number === currentPage ? " active" : ""}`}
+              key={number}
+              onClick={() => paginate(number)}
+            >
+              {number}
+            </div>
+          ))}
+          <div className="page">
+            <i className="fa-solid fa-chevron-right"></i>
+          </div>
+        </div>}
       </div>
     </section>
   );

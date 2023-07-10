@@ -143,7 +143,7 @@ const InforShop = () => {
               )}
             </div>
 
-            {(user?.username === "admin" || user?.uid === shopInfo.postedByUser) && (
+            {(user?.username === "admin" || user?.id === shopInfo.posted_user) && (
               <div className="service">
                 <h3>編集</h3>
                 <div className="buttons">
@@ -219,7 +219,7 @@ const InforShop = () => {
                     </div>
                     <div className="content">
                       <div className="top">
-                        <div className="name">{'User ' + review.user_id}</div>
+                        <div className="name">{review.User.name}</div>
                         <div className="status">
                           <div className="icon">
                             <span>(0)</span>{" "}

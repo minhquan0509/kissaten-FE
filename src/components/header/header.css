@@ -135,8 +135,8 @@
 }
 
 .popup-content {
-  width: 650px;
-  height: 410px;
+  width: 800px;
+  height: 500px;
   background-color: #fcf8f8;
   padding: 20px;
   border-radius: 4px;
@@ -241,9 +241,8 @@ li{
 
 .form-group textarea {
   width: 100%;
-  height: 80px;
+  /* height: 80px; */
   resize: none;
-  overflow: scroll;
 }
 
 .form-submit {

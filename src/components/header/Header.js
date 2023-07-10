@@ -5,9 +5,11 @@ import { useSelector } from 'react-redux';
 import MenuDropdown from '../MenuDropdown/MenuDropdown'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 const Header = () => {
   const user = useSelector((state) => state.login.user);
+  const token = useSelector(state => state.login.token);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [cafeName, setCafeName] = useState("");
   const [area, setArea] = useState("");
@@ -15,7 +17,6 @@ const Header = () => {
   
   const [status, setStatus] = useState("open");
   const navigate = useNavigate();
-
   
 
   const handleSearchClick = () => {
@@ -61,6 +62,7 @@ const Header = () => {
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
+    setImage(file);
     const reader = new FileReader();
 
     reader.onload = () => {
@@ -72,6 +74,7 @@ const Header = () => {
 
   const [isPopupOpen1, setPopupOpen1] = useState(false);
   const [imageCover, setImageCover] = useState(null);
+  const [image, setImage] = useState(null);
   const [name, setName] = useState('');
   const [open_hour, setopen_hour] = useState('');
   const [close_hour, setclose_hour] = useState('');
@@ -83,43 +86,59 @@ const Header = () => {
   const handleAddSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(
-        "https://localhost:7263/api/CoffeeShop/AddCoffeeShop",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
+      // const response = await fetch(
+      //   "https://localhost:7263/api/CoffeeShop/AddCoffeeShop",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Accept: "application/json",
+      //       "Access-Control-Allow-Origin": "*",
+      //     },
 
-          body: JSON.stringify({
-            name: name,
-            address: address,
-            gmail: "string",
-            contactNumber: 0,
-            imageCover: imageCover,
-            average_rating: 0,
-            open_hour: open_hour,
-            close_hour: close_hour,
-            service: boolservice,
-            description: description,
-            status: false,
-            postedByUser: user.id,
-            approved: 0,
-          }),
+      //     body: JSON.stringify({
+      //       name: name,
+      //       address: address,
+      //       gmail: "string",
+      //       contactNumber: 0,
+      //       imageCover: imageCover,
+      //       average_rating: 0,
+      //       open_hour: open_hour,
+      //       close_hour: close_hour,
+      //       service: boolservice,
+      //       description: description,
+      //       status: false,
+      //       postedByUser: user.id,
+      //       approved: 0,
+      //     }),
+      //   }
+      // );
+      const formattedName = name.replace(/\s+/g, '').toLowerCase();
+      const email = `${formattedName}@gmail.com`;
+
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("address", address);
+      formData.append("contactNumber", '0123456789');
+      formData.append("open_hour", open_hour);
+      formData.append("close_hour", close_hour);
+      formData.append("air_conditioner", service == 'true');
+      formData.append("description", description);
+      formData.append("email", email);
+      formData.append("images", image);
+
+      const response = await axios.post(`http://localhost:3001/coffees`, formData, {
+        headers: {
+          Authorization: 'Bearer ' + token
         }
-      );
-      if (response.status === 200) {
-        toast.success('喫茶店が追加を作成しました。', {
-          autoClose: 2500, // Đóng sau 2 giây
-        });
-        console.log("Shop added successfully");
-      } else {
-        toast.error('喫茶店の追加中にエラーが発生しました。',{
-          autoClose: 2500, // Đóng sau 2 giây
-        });
-      }
+      })
+      toast.success('喫茶店が追加を作成しました。', {
+        autoClose: 2500, // Đóng sau 2 giây
+      });
+      setPopupOpen1(false)
+      setTimeout(() => {
+        navigate('/');
+      }, 1000)
     } catch (error) {
       console.error(error);
       toast.error('喫茶店の追加中にエラーが発生しました。',{
@@ -320,6 +339,8 @@ const Header = () => {
                   <textarea
                     id="description"
                     name="description"
+                    cols="30"
+                    rows="10"
                     required
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
@@ -335,8 +356,7 @@ const Header = () => {
                     required
                     value={service}
                     onChange={(e) => setService(e.target.value)}
-                  >
-                    <option value=""></option>
+                  >=
                     <option value="true">Có điều hòa</option>
                     <option value="false">Không có điều hòa</option>
                   </select>
@@ -369,6 +389,7 @@ const Header = () => {
                         accept="image/*"
                         onChange={handleImageUpload}
                         className="file-input"
+                        required
                       />
                     </label>
                   )}

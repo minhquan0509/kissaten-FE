@@ -131,7 +131,7 @@ const Home = () => {
                   </div>
                   <div className="description">
                     <i className="fa-solid fa-clock"></i>
-                    {item.open_hour} - {item.close_hour.slice(0, 5)} 毎日
+                    {item.open_hour.slice(0, 5)} - {item.close_hour.slice(0, 5)} 毎日
                   </div>
                 </div>
                   <Bookmark
@@ -157,7 +157,7 @@ const Home = () => {
                   </div>
                   <div className="description">
                     <i className="fa-solid fa-clock"></i>
-                    {item.open_hour.slice(5)} - {item.close_hour.slice(5)} 毎日
+                    {item.open_hour.slice(0, 5)} - {item.close_hour.slice(0, 5)} 毎日
                   </div>
                 </div>
               </div>)
