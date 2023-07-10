@@ -127,7 +127,7 @@ const Header = () => {
       formData.append("email", email);
       formData.append("images", image);
 
-      const response = await axios.post(`http://localhost:3001/coffees`, formData, {
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_DOMAIN}coffees`, formData, {
         headers: {
           Authorization: 'Bearer ' + token
         }

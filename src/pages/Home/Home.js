@@ -22,13 +22,14 @@ const Home = () => {
   useEffect(() => {
     const getCoffeeShops = async () => {
       const response = await axios.get(
-        `http://localhost:3001/coffees`
+        `${process.env.REACT_APP_SERVER_DOMAIN}coffees`
       );
       const data = await response.data.data.coffees;
       setShop(data);
       setInitialShop(data);
     };
     getCoffeeShops();
+    console.log(process.env.REACT_APP_SERVER_DOMAIN)
   }, []);
 
   const handlePulldownChange = (event) => {
@@ -49,7 +50,7 @@ const Home = () => {
     const axiosGetBookmarkedItemIds = async () => {
       if (user) {
         const response = await axios.get(
-          `http://localhost:3001/users/${user?.id}/bookmarks`
+          `${process.env.REACT_APP_SERVER_DOMAIN}users/${user?.id}/bookmarks`
         );
         const data = await response.data.data.user.Bookmarks;
         const bookmarkedItemIds = data.length ? data.map((item) => item.coffee_id) : [];
@@ -62,7 +63,7 @@ const Home = () => {
   const handleBookmarkClick = async (itemId) => {
     if (bookmarkedItemIds.includes(itemId)) {
       await axios.delete(
-        `http://localhost:3001/coffees/${itemId}/bookmarks`, {
+        `${process.env.REACT_APP_SERVER_DOMAIN}coffees/${itemId}/bookmarks`, {
           headers: {
             Authorization: 'Bearer ' + token
           }
@@ -73,7 +74,7 @@ const Home = () => {
       );
     } else {
       await axios.post(
-        `http://localhost:3001/coffees/${itemId}/bookmarks`, {}, {
+        `${process.env.REACT_APP_SERVER_DOMAIN}coffees/${itemId}/bookmarks`, {}, {
           headers: {
             Authorization: 'Bearer ' + token
           }
@@ -129,7 +130,7 @@ const Home = () => {
                 onClick={() => navigate(`/inforshop/${item.id}`)}
               >
                 <div className="image">
-                  <img src={'http://localhost:3001/' + item.CoffeeImages[0].image} alt="" />
+                  <img src={process.env.REACT_APP_SERVER_DOMAIN + item.CoffeeImages[0].image} alt="" />
                 </div>
                 <div className="content">
                   <div className="name">{item.name}</div>
@@ -155,7 +156,7 @@ const Home = () => {
                 key={index}
               >
                 <div className="image">
-                  <img src={'http://localhost:3001/' + item.CoffeeImages[0].image} alt="" />
+                  <img src={`${process.env.REACT_APP_SERVER_DOMAIN}` + item.CoffeeImages[0].image} alt="" />
                 </div>
                 <div className="content">
                   <div className="name">{item.name}</div>

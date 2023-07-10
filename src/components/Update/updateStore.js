@@ -89,7 +89,7 @@ const UpdateStore = ({ handlePopupClose, id, storeInfo }) => {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.patch(`http://localhost:3001/coffees/${id}`, {
+      const response = await axios.patch(`${process.env.REACT_APP_SERVER_DOMAIN}coffees/${id}`, {
         name: productName,
         address,
         open_hour: open,
@@ -199,7 +199,7 @@ const UpdateStore = ({ handlePopupClose, id, storeInfo }) => {
               <div className="square form-group">
                 {storeInfo.CoffeeImages[0]?.image ? (
                   <div className="image-square">
-                    <img src={`http://localhost:3001/` + storeInfo.CoffeeImages[0]?.image} alt="Uploaded" className="image" />
+                    <img src={`${process.env.REACT_APP_SERVER_DOMAIN}` + storeInfo.CoffeeImages[0]?.image} alt="Uploaded" className="image" />
                   </div>
                 ) : (
                   <label htmlFor="image-upload" className="upload-label">

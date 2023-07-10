@@ -22,7 +22,7 @@ const Bookmarkpage = () => {
   const [pulldown, setPulldown] = useState([]);
 
   const axiosGetshop = async () => {
-    const response = await axios.get(`http://localhost:3001/users/${user.id}/bookmarks`);
+    const response = await axios.get(`${process.env.REACT_APP_SERVER_DOMAIN}users/${user.id}/bookmarks`);
     const data = await response.data.data.user.Bookmarks;
     setShop(data.map(item => item.Coffee));
     setInitialShop(data.map(item => item.Coffee));
@@ -35,7 +35,7 @@ const Bookmarkpage = () => {
     const axiosGetBookmarkedItemIds = async () => {
       if (user) {
         const response = await axios.get(
-          `http://localhost:3001/users/${user?.id}/bookmarks`
+          `${process.env.REACT_APP_SERVER_DOMAIN}users/${user?.id}/bookmarks`
         );
         const data = await response.data.data.user.Bookmarks;
         const bookmarkedItemIds = data.length ? data.map((item) => item.coffee_id) : [];
@@ -48,7 +48,7 @@ const Bookmarkpage = () => {
   const handleBookmarkClick = async (itemId) => {
     if (bookmarkedItemIds.includes(itemId)) {
       await axios.delete(
-        `http://localhost:3001/coffees/${itemId}/bookmarks`, {
+        `${process.env.REACT_APP_SERVER_DOMAIN}coffees/${itemId}/bookmarks`, {
           headers: {
             Authorization: 'Bearer ' + token
           }
@@ -59,7 +59,7 @@ const Bookmarkpage = () => {
       );
     } else {
       await axios.post(
-        `http://localhost:3001/coffees/${itemId}/bookmarks`, {}, {
+        `${process.env.REACT_APP_SERVER_DOMAIN}coffees/${itemId}/bookmarks`, {}, {
           headers: {
             Authorization: 'Bearer ' + token
           }
@@ -178,7 +178,7 @@ const Bookmarkpage = () => {
                 onClick={() => navigate(`/inforshop/${item.id}`)}
               >
                 <div className="image">
-                  <img src={'http://localhost:3001/' + item.CoffeeImages[0].image} alt="" />
+                  <img src={`${process.env.REACT_APP_SERVER_DOMAIN}` + item.CoffeeImages[0].image} alt="" />
                 </div>
                 <div className="content">
                   <div className="name">{item.name}</div>

@@ -24,7 +24,7 @@ const Signup = () => {
     }
 
     try {
-      const response = await axios.post(`http://localhost:3001/users/signup`, {
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_DOMAIN}users/signup`, {
         name,
         gmail: userName,
         password,
@@ -49,7 +49,7 @@ const Signup = () => {
       <div className="wrap">
         <div className="signup-image">
           <img
-            src="https://images.pexels.com/photos/683039/pexels-photo-683039.jpeg?cs=srgb&dl=pexels-afta-putta-gunawan-683039.jpg&fm=jpg"
+            src="kissaten.jpg"
             alt=""
           />
         </div>

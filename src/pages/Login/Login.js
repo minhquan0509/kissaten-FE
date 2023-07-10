@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { login } from './loginActions';
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
+import Background from './kissaten.jpg'
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -31,7 +32,7 @@ const Login = () => {
     <section className='login'>
       <div className="wrap">
         <div className="login-image">
-          <img src="https://images.pexels.com/photos/683039/pexels-photo-683039.jpeg?cs=srgb&dl=pexels-afta-putta-gunawan-683039.jpg&fm=jpg" alt="" />
+          <img src='kissaten.jpg' alt="" />
         </div>
         <div className="login-form">
           <div className="heading">

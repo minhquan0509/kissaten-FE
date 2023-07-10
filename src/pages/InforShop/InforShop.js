@@ -49,7 +49,7 @@ const InforShop = () => {
 
   const axiosShopInfo = async () => {
     const response = await axios.get(
-      `http://localhost:3001/coffees/${id}/reviews/`
+      `${process.env.REACT_APP_SERVER_DOMAIN}coffees/${id}/reviews/`
     );
     const data = response.data.data.coffee;
     console.log(data);
@@ -94,7 +94,7 @@ const InforShop = () => {
 
   const handleAddReview = async () => {
     try {
-      const response = await axios.post(`http://localhost:3001/coffees/${id}/reviews`, {
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_DOMAIN}coffees/${id}/reviews`, {
         review: comment,
         rating
       }, {
@@ -123,7 +123,7 @@ const InforShop = () => {
                 <i className="fa-solid fa-bookmark fa-shake fa-xl" style={{ color: '#fad000' }}></i>
               </div>
             )}
-            <img src={'http://localhost:3001/' + shopInfo.CoffeeImages[0].image} alt="" />
+            <img src={`${process.env.REACT_APP_SERVER_DOMAIN}` + shopInfo.CoffeeImages[0].image} alt="" />
           </div>
           <div className="service">
             <h3 className="type">サービス</h3>

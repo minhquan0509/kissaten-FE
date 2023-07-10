@@ -14,7 +14,7 @@ const DeletePopup = ({handlePopupClose1,id}) => {
   const onDelete = () => {
     const cancelShop = async () => {
         try {
-          const response = await axios.delete(`http://localhost:3001/coffees/${id}`, {
+          const response = await axios.delete(`${process.env.REACT_APP_SERVER_DOMAIN}coffees/${id}`, {
             headers: {
               Authorization: 'Bearer ' + token
             }

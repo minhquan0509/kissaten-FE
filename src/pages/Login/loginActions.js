@@ -11,7 +11,7 @@ export const login = (username, password, navigateToHome) => {
     dispatch({ type: LOGIN_REQUEST });
 
     try {
-      const response = await axios.post('http://localhost:3001/users/login', {
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_DOMAIN}users/login`, {
         gmail: username,
         password: password,
       });

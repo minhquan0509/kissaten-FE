@@ -46,7 +46,7 @@ const Search = () => {
     const axiosShopInfo = async () => {
       try {
         const response = await axios.get(
-          'http://localhost:3001/coffees/', {
+          `${process.env.REACT_APP_SERVER_DOMAIN}coffees/`, {
             params: {
               name,
               address,
@@ -75,7 +75,7 @@ const Search = () => {
   const handleBookmarkClick = async (itemId) => {
     if (bookmarkedItemIds.includes(itemId)) {
       await axios.delete(
-        `http://localhost:3001/coffees/${itemId}/bookmarks`, {
+        `${process.env.REACT_APP_SERVER_DOMAIN}coffees/${itemId}/bookmarks`, {
           headers: {
             Authorization: 'Bearer ' + token
           }
@@ -86,7 +86,7 @@ const Search = () => {
       );
     } else {
       await axios.post(
-        `http://localhost:3001/coffees/${itemId}/bookmarks`, {}, {
+        `${process.env.REACT_APP_SERVER_DOMAIN}coffees/${itemId}/bookmarks`, {}, {
           headers: {
             Authorization: 'Bearer ' + token
           }
@@ -133,7 +133,7 @@ const Search = () => {
                 onClick={() => (user && navigate(`/inforshop/${item.id}`))}
               >
                 <div className='image'>
-                  <img src={`http://localhost:3001/` + item.CoffeeImages[0].image} alt='' />
+                  <img src={`${process.env.REACT_APP_SERVER_DOMAIN}` + item.CoffeeImages[0].image} alt='' />
                 </div>
                 <div className='content'>
                   <div className='name'>{item.name}</div>
