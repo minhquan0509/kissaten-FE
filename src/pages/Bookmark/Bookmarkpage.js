@@ -23,9 +23,9 @@ const Bookmarkpage = () => {
 
   const axiosGetshop = async () => {
     const response = await axios.get(`${process.env.REACT_APP_SERVER_DOMAIN}users/${user.id}/bookmarks`);
-    const data = await response.data.data.user.Bookmarks;
-    setShop(data.map(item => item.Coffee));
-    setInitialShop(data.map(item => item.Coffee));
+    const data = await response.data.data.user.bookmarks;
+    setShop(data.map(item => item.coffee));
+    setInitialShop(data.map(item => item.coffee));
   }
   useEffect(() => {
     axiosGetshop();
@@ -37,7 +37,7 @@ const Bookmarkpage = () => {
         const response = await axios.get(
           `${process.env.REACT_APP_SERVER_DOMAIN}users/${user?.id}/bookmarks`
         );
-        const data = await response.data.data.user.Bookmarks;
+        const data = await response.data.data.user.bookmarks;
         const bookmarkedItemIds = data.length ? data.map((item) => item.coffee_id) : [];
         dispatch(updateBookmarkedItemIds(bookmarkedItemIds));
       }
