@@ -197,9 +197,9 @@ const UpdateStore = ({ handlePopupClose, id, storeInfo }) => {
                 <label htmlFor="image">Hình ảnh:</label>
               </div>
               <div className="square form-group">
-                {storeInfo.CoffeeImages[0]?.image ? (
+                {storeInfo.coffeeImages[0]?.image ? (
                   <div className="image-square">
-                    <img src={`${process.env.REACT_APP_SERVER_DOMAIN}` + storeInfo.CoffeeImages[0]?.image} alt="Uploaded" className="image" />
+                    <img src={`${process.env.REACT_APP_SERVER_DOMAIN}` + storeInfo.coffeeImages[0]?.image} alt="Uploaded" className="image" />
                   </div>
                 ) : (
                   <label htmlFor="image-upload" className="upload-label">

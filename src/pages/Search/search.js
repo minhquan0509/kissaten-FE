@@ -133,7 +133,7 @@ const Search = () => {
                 onClick={() => (user && navigate(`/inforshop/${item.id}`))}
               >
                 <div className='image'>
-                  <img src={`${process.env.REACT_APP_SERVER_DOMAIN}` + item.CoffeeImages[0].image} alt='' />
+                  <img src={`${process.env.REACT_APP_SERVER_DOMAIN}` + item.coffeeImages[0].image} alt='' />
                 </div>
                 <div className='content'>
                   <div className='name'>{item.name}</div>

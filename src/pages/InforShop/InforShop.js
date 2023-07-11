@@ -123,7 +123,7 @@ const InforShop = () => {
                 <i className="fa-solid fa-bookmark fa-shake fa-xl" style={{ color: '#fad000' }}></i>
               </div>
             )}
-            <img src={`${process.env.REACT_APP_SERVER_DOMAIN}` + shopInfo.CoffeeImages[0].image} alt="" />
+            <img src={`${process.env.REACT_APP_SERVER_DOMAIN}` + shopInfo.coffeeImages[0].image} alt="" />
           </div>
           <div className="service">
             <h3 className="type">サービス</h3>
@@ -219,7 +219,7 @@ const InforShop = () => {
                     </div>
                     <div className="content">
                       <div className="top">
-                        <div className="name">{review.User.name}</div>
+                        <div className="name">{review.user.name}</div>
                         <div className="status">
                           <div className="icon">
                             <span>(0)</span>{" "}
