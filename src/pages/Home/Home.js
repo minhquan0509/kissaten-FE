@@ -52,7 +52,7 @@ const Home = () => {
         const response = await axios.get(
           `${process.env.REACT_APP_SERVER_DOMAIN}users/${user?.id}/bookmarks`
         );
-        const data = await response.data.data.user.Bookmarks;
+        const data = await response.data.data.user.bookmarks;
         const bookmarkedItemIds = data.length ? data.map((item) => item.coffee_id) : [];
         dispatch(updateBookmarkedItemIds(bookmarkedItemIds));
       }
