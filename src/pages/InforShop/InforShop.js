@@ -21,7 +21,7 @@ const InforShop = () => {
   const user = useSelector((state) => state.login.user);
   const token = useSelector((state) => state.login.token);
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const bookmarkedItemIds = useSelector((state) => state.login.user.Bookmarks);
+  const bookmarkedItemIds = useSelector((state) => state.login.user.bookmarks);
 
 // Lấy giá trị bookmarkedItemIds từ Redux store trong useEffect
   useEffect(() => {
@@ -54,7 +54,7 @@ const InforShop = () => {
     const data = response.data.data.coffee;
     console.log(data);
     setShopInfo(data);
-    setReview(data.Reviews);
+    setReview(data.reviews);
   };
 
   useEffect(() => {
