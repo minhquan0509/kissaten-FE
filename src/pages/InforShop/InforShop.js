@@ -9,6 +9,10 @@ import Showrating from "../../components/Rating/showrating";
 import RatingStar from "../../components/Rating/ratingstar";
 import UpdateStore from "../../components/Update/updateStore";
 import DeletePopup from "../../components/DeletePopup/DeletePopup";
+// import AliceCarousel from 'react-alice-carousel';
+import "react-alice-carousel/lib/alice-carousel.css";
+import "react-slideshow-image/dist/styles.css";
+import { Slide } from 'react-slideshow-image';
 
 const InforShop = () => {
   const [shopInfo, setShopInfo] = useState(null);
@@ -117,13 +121,33 @@ const InforShop = () => {
       <div className="wrap">
         {/* Truy cập và sử dụng thông tin quán cà phê trong shopInfo */}
         <div className="inforShop-left">
-          <div className="image">
-          {isBookmarked && (
+          <div className="image-container">
+            {isBookmarked && (
               <div className="bookmark-icon">
                 <i className="fa-solid fa-bookmark fa-shake fa-xl" style={{ color: '#fad000' }}></i>
               </div>
             )}
-            <img src={`${process.env.REACT_APP_SERVER_DOMAIN}` + shopInfo.coffeeImages[0].image} alt="" />
+            <Slide>
+              {shopInfo.coffeeImages?.map((item, index) => (
+                <div className="each-slide-effect">
+                  <div className="slide-item" style={{ backgroundImage: `url(${process.env.REACT_APP_SERVER_DOMAIN}${item.image})` }}>
+                  </div>
+                </div>
+              ))}
+            </Slide>
+            <div style={{ display: 'flex', marginBottom: '50px' }} className="">
+              {
+                shopInfo.coffeeImages?.map((item) => (
+                  <div className="" style={{ width: '100%', padding: '10px', height: '100px'}}>
+                    <img
+                      src={`${process.env.REACT_APP_SERVER_DOMAIN}` + item.image}
+                      style={{ width: '100%', height: '100%', margin: '0 5px', cursor: 'pointer', objectFit: 'contain', borderRadius: '2px' }}
+                    />
+                  </div>
+                ))
+              }
+            </div>
+            {/* <img src={`${process.env.REACT_APP_SERVER_DOMAIN}` + shopInfo.coffeeImages[0].image} alt="" /> */}
           </div>
           <div className="service">
             <h3 className="type">サービス</h3>
