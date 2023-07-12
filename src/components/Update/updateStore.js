@@ -37,7 +37,7 @@ const UpdateStore = ({ handlePopupClose, id, storeInfo }) => {
       setOpen(storeInfo.open_hour.slice(0, 5));
       setClose(storeInfo.close_hour.slice(0, 5));
       setService(storeInfo.air_conditioner);
-      setStatus(storeInfo.status);
+      setStatus(storeInfo.is_crowded);
   }, [shopInfo]); 
 
   //console.log(open);
