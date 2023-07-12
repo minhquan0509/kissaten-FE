@@ -122,7 +122,7 @@ const Header = () => {
       formData.append("contactNumber", '0123456789');
       formData.append("open_hour", open_hour);
       formData.append("close_hour", close_hour);
-      formData.append("air_conditioner", service == 'true');
+      formData.append("air_conditioner", service);
       formData.append("description", description);
       formData.append("email", email);
 

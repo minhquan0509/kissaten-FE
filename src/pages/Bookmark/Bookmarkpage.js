@@ -152,7 +152,7 @@ const Bookmarkpage = () => {
               <div className="form-control">
                 <input value='isOpen' id='row-2' type="radio" name='radio-1' onChange={handleOpeningHour}/>
                 <label htmlFor="row-2"></label>
-                <p className="text">開いています</p>
+                <p className="text">開いている</p>
               </div>
             </div>
             <div className="filter">
