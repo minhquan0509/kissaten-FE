@@ -62,7 +62,7 @@ const Header = () => {
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
-    setImage(file);
+    setImage([...image, ...event.target.files]);
     const reader = new FileReader();
 
     reader.onload = () => {
@@ -74,7 +74,7 @@ const Header = () => {
 
   const [isPopupOpen1, setPopupOpen1] = useState(false);
   const [imageCover, setImageCover] = useState(null);
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState([]);
   const [name, setName] = useState('');
   const [open_hour, setopen_hour] = useState('');
   const [close_hour, setclose_hour] = useState('');
@@ -125,7 +125,10 @@ const Header = () => {
       formData.append("air_conditioner", service == 'true');
       formData.append("description", description);
       formData.append("email", email);
-      formData.append("images", image);
+
+      for (let i = 0; i < image.length; i++) {
+        formData.append("images", image[i]);
+      }
 
       const response = await axios.post(`${process.env.REACT_APP_SERVER_DOMAIN}coffees`, formData, {
         headers: {
@@ -387,6 +390,7 @@ const Header = () => {
                         id="image-upload"
                         type="file"
                         accept="image/*"
+                        multiple
                         onChange={handleImageUpload}
                         className="file-input"
                         required
