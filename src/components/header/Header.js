@@ -79,9 +79,8 @@ const Header = () => {
   const [open_hour, setopen_hour] = useState('');
   const [close_hour, setclose_hour] = useState('');
   const [description, setDescription] = useState('');
-  const [service, setService] = useState('');
+  const [service, setService] = useState(true);
   const [address, setAddress] = useState('');
-  const boolservice = (service.toLowerCase() === "true");
 
   const handleAddSubmit = async (e) => {
     e.preventDefault();
@@ -132,7 +131,8 @@ const Header = () => {
 
       const response = await axios.post(`${process.env.REACT_APP_SERVER_DOMAIN}coffees`, formData, {
         headers: {
-          Authorization: 'Bearer ' + token
+          Authorization: 'Bearer ' + token,
+          "Content-Type": "multipart/form-data",
         }
       })
       toast.success('喫茶店が追加を作成しました。', {
